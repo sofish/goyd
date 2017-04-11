@@ -1,33 +1,33 @@
 package main
 
 import (
-	"fmt"
-	"os"
-	"net/http"
-	"io/ioutil"
 	"encoding/json"
-	"strings"
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"os"
 	"os/exec"
+	"strings"
 )
 
 const API string = "http://fanyi.youdao.com/openapi.do?keyfrom=go-translator&key=307165215&type=data&doctype=json&version=1.1&q="
 
 type Web struct {
-	Value		[]string	`json:"value"`
-	Key			string		`json:"key"`
+	Value []string `json:"value"`
+	Key   string   `json:"key"`
 }
 
 type Basic struct {
-	Phonetic	string		`json:"phonetic"`
-	Explains	[]string	`json:"explains"`
+	Phonetic string   `json:"phonetic"`
+	Explains []string `json:"explains"`
 }
 
 type Translation struct {
-	Translation	[]string	`json:"translation"`
-	Basic		Basic		`json:"basic"`
-	Query		string		`json:"query"`
-	ErrorCode	float64		`json:"errorCode"`
-	Web			[]Web		`json:"web"`
+	Translation []string `json:"translation"`
+	Basic       Basic    `json:"basic"`
+	Query       string   `json:"query"`
+	ErrorCode   float64  `json:"errorCode"`
+	Web         []Web    `json:"web"`
 }
 
 func main() {
@@ -38,7 +38,9 @@ func main() {
 	}
 
 	if _, ok := keys[1]; !ok {
-		fmt.Println("USEAGE: `goyd 要翻译的词或句`")
+		fmt.Println("USEAGE: ")
+		fmt.Println("\t- $ goyd 词/句 [是否读出来]")
+		fmt.Println("\t- $ goyd golang 1 /* 试一下 */")
 		return
 	}
 
@@ -73,11 +75,16 @@ func main() {
 		//　50 - 无效的key
 		//　60 - 无词典结果，仅在获取词典结果生效
 		switch code {
-			case 20: fmt.Println("出错啦：要翻译的文本过长")
-			case 30: fmt.Println("出错啦：无法进行有效的翻译")
-			case 40: fmt.Println("出错啦：不支持的语言类型")
-			case 50: fmt.Println("出错啦：无效的key")
-			case 60: fmt.Println("出错啦：无词典结果，仅在获取词典结果生效")
+		case 20:
+			fmt.Println("出错啦：要翻译的文本过长")
+		case 30:
+			fmt.Println("出错啦：无法进行有效的翻译")
+		case 40:
+			fmt.Println("出错啦：不支持的语言类型")
+		case 50:
+			fmt.Println("出错啦：无效的key")
+		case 60:
+			fmt.Println("出错啦：无词典结果，仅在获取词典结果生效")
 		}
 
 		return
@@ -94,7 +101,7 @@ func main() {
 	}
 
 	if len(j.Web) > 0 {
-		fmt.Println("例句：")
+		fmt.Println("例子：")
 		for _, v := range j.Web {
 			fmt.Printf("\t%s：\n\t\t- %s\n", v.Key, strings.Join(v.Value[:], "\n\t\t- "))
 		}
