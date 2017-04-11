@@ -1,4 +1,4 @@
-package goyd
+package main
 
 import (
 	"fmt"
@@ -64,7 +64,7 @@ func main() {
 		fmt.Println("出错啦：难道有道已经停用了，-1s")
 	}
 
-	if code := j.ErrorCode; code > 0{
+	if code := j.ErrorCode; code > 0 {
 		//errorCode：
 		//　0 - 正常
 		//　20 - 要翻译的文本过长
