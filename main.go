@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"time"
 )
 
 const API string = "http://fanyi.youdao.com/openapi.do?keyfrom=go-translator&key=307165215&type=data&doctype=json&version=1.1&q="
@@ -45,7 +46,10 @@ func main() {
 	}
 
 	input := os.Args[1]
-	resp, err := http.Get(API + input)
+	client := http.Client{
+		Timeout: time.Duration(time.Second * 5),
+	}
+	resp, err := client.Get(API + input)
 
 	if err != nil {
 		fmt.Println("出错啦：网络不稳定啊少年，-1s")
